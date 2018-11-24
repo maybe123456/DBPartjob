@@ -9,7 +9,7 @@ android {
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.ddd.test2"
-        resValue "string", "app_name", "DBNewLife"
+        resValue "string", "app_name", "兼职新闻"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 7
