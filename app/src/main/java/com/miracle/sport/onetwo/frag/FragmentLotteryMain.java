@@ -231,9 +231,9 @@ public class FragmentLotteryMain extends HandleFragment<FragmentCpMainTopBinding
     }
 
     private void initMard(List<Spanned> list) {
-        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">减肥基础</font>已更新"));
-        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">局部塑身</font>已更新"));
-        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">中医减肥</font>已更新"));
+        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">兼职网赚</font>已更新"));
+        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">兼职案例</font>已更新"));
+        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">兼职经验</font>已更新"));
         mardatas.addAll(list);
 
         textSwitcher = topBinding.getRoot().findViewById(R.id.cp_main_top_ts);
@@ -258,10 +258,13 @@ public class FragmentLotteryMain extends HandleFragment<FragmentCpMainTopBinding
     private void initBanner() {
         banner = topBinding.mainFarg1Banner;
         ArrayList images = new ArrayList<>();
-        images.add(R.mipmap.banner_f2);
-        images.add(R.mipmap.b3);
-        images.add(R.mipmap.b5);
-        images.add(R.mipmap.banner04);
+//        images.add(R.mipmap.banner_f2);
+//        images.add(R.mipmap.b3);
+//        images.add(R.mipmap.b5);
+//        images.add(R.mipmap.banner04);
+        images.add("file:///android_asset/lottery/banner01.png");
+        images.add("file:///android_asset/lottery/banner02.png");
+        images.add("file:///android_asset/lottery/banner03.png");
         banner.setImages(images).setImageLoader(new ImageLoader() {
             @Override
             public void displayImage(Context context, Object path, ImageView imageView) {
