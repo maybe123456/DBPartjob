@@ -60,23 +60,23 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-            <ImageView
+            <com.miracle.sport.onetwo.view.MImgView
                 android:id="@+id/iv1_2"
                 android:layout_width="0dp"
                 android:layout_height="106dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="matrix"
                 android:visibility="visible"
                 />
 
-            <ImageView
+            <com.miracle.sport.onetwo.view.MImgView
                 android:id="@+id/iv2_2"
                 android:layout_width="0dp"
                 android:layout_height="106dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="matrix"
                 android:visibility="visible"
                 android:layout_marginLeft="5dp"
                 />
@@ -87,34 +87,34 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-            <ImageView
+            <com.miracle.sport.onetwo.view.MImgView
                 android:id="@+id/iv1"
                 android:layout_width="0dp"
                 android:layout_height="96dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="matrix"
                 android:visibility="visible"
                 />
 
-            <ImageView
+            <com.miracle.sport.onetwo.view.MImgView
                 android:id="@+id/iv2"
                 android:layout_width="0dp"
                 android:layout_height="96dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="matrix"
                 android:visibility="visible"
                 android:layout_marginLeft="5dp"
                 />
 
-            <ImageView
+            <com.miracle.sport.onetwo.view.MImgView
                 android:id="@+id/iv3"
                 android:layout_width="0dp"
                 android:layout_height="96dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="matrix"
                 android:visibility="visible"
                 android:layout_marginLeft="5dp"
                 />

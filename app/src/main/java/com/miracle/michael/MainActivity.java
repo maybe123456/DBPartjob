@@ -61,7 +61,6 @@ public class MainActivity extends Activity {
         tv2.setText("不知道哪个卡可用！");
         rxPermission = new RxPermissions(this);
         requestPermissions();
-
     }
 
     private void getNumber() {

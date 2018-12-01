@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Message;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -23,10 +22,8 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
-import com.gongwen.marqueen.SimpleMF;
 import com.miracle.R;
 import com.miracle.base.AppConfig;
-import com.miracle.base.im.util.Utils;
 import com.miracle.base.network.GlideApp;
 import com.miracle.base.network.RequestUtil;
 import com.miracle.base.network.ZCallback;
@@ -34,18 +31,16 @@ import com.miracle.base.network.ZClient;
 import com.miracle.base.network.ZResponse;
 import com.miracle.base.switcher.GameActivity;
 import com.miracle.base.util.ContextHolder;
-import com.miracle.base.util.DisplayUtil;
 import com.miracle.databinding.FragmentCpMainTopBinding;
 import com.miracle.sport.SportService;
 import com.miracle.sport.home.bean.ChannerlKey;
 import com.miracle.sport.onetwo.act.OneFragActivity;
-import com.miracle.sport.onetwo.netbean.FSServer;
-import com.miracle.sport.onetwo.netbean.FishType;
 import com.miracle.sport.onetwo.netbean.LotteryCatListItem;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,10 +190,23 @@ public class FragmentLotteryMain extends HandleFragment<FragmentCpMainTopBinding
             protected void onSuccess(ZResponse<List<ChannerlKey>> zResponse) {
                 LinearLayout main_frag_hs_ll = topBinding.getRoot().findViewById(R.id.main_frag_hs_ll);
                 main_frag_hs_ll.removeAllViews();
+                main_frag_hs_ll = topBinding.getRoot().findViewById(R.id.main_frag_hs_ll3);
+                main_frag_hs_ll.removeAllViews();
+                mardatas.clear();
+                int counter = 0;
                 for(ChannerlKey item : zResponse.getData()){
                     //排除 ‘推荐’
-                    if(1 != Integer.parseInt(item.getId()))
-                        addToHS(item.getName(),Integer.parseInt(item.getId()),item.getPic());
+                    if(1 != Integer.parseInt(item.getId())) {
+                        LinearLayout ll1 = null;
+                        if(counter % 2 == 0){
+                            ll1 = topBinding.getRoot().findViewById(R.id.main_frag_hs_ll);
+                        }else{
+                            ll1 = topBinding.getRoot().findViewById(R.id.main_frag_hs_ll3);
+                        }
+                        addToHS(item.getName(),Integer.parseInt(item.getId()),item.getPic(),ll1);
+                        counter++;
+                    }
+                    mardatas.add(Html.fromHtml("<font color=\"#cc0000\">"+item.getName()+"</font>已更新!"));
                 }
             }
         };
@@ -207,7 +215,7 @@ public class FragmentLotteryMain extends HandleFragment<FragmentCpMainTopBinding
         RequestUtil.cacheUpdate(ZClient.getService(SportService.class).getSearchKeys(), zCallback);
     }
 
-    private void addToHS(final String str, final int key, String picUrl){
+    private void addToHS(final String str, final int key, String picUrl, LinearLayout ll){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.main_frag_hs1_item,null);
         ImageView iv = view.findViewById(R.id.main_farg_hs1_iv);
         ((TextView)view.findViewById(R.id.main_farg_hs1_tv1)).setText(str);
@@ -226,14 +234,11 @@ public class FragmentLotteryMain extends HandleFragment<FragmentCpMainTopBinding
                 startActivity(i);
             }
         });
-        LinearLayout main_frag_hs_ll = topBinding.getRoot().findViewById(R.id.main_frag_hs_ll);
-        main_frag_hs_ll.addView(view);
+        ll.addView(view);
     }
 
     private void initMard(List<Spanned> list) {
-        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">兼职网赚</font>已更新"));
-        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">兼职案例</font>已更新"));
-        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">兼职经验</font>已更新"));
+        mardatas.add(Html.fromHtml("<font color=\"#cc0000\">最新分类</font>已更新"));
         mardatas.addAll(list);
 
         textSwitcher = topBinding.getRoot().findViewById(R.id.cp_main_top_ts);
@@ -258,13 +263,18 @@ public class FragmentLotteryMain extends HandleFragment<FragmentCpMainTopBinding
     private void initBanner() {
         banner = topBinding.mainFarg1Banner;
         ArrayList images = new ArrayList<>();
-//        images.add(R.mipmap.banner_f2);
-//        images.add(R.mipmap.b3);
-//        images.add(R.mipmap.b5);
-//        images.add(R.mipmap.banner04);
-        images.add("file:///android_asset/lottery/banner01.png");
-        images.add("file:///android_asset/lottery/banner02.png");
-        images.add("file:///android_asset/lottery/banner03.png");
+        String asDir = "main_banner";
+        try {
+            String[] imgs = mContext.getAssets().list(asDir);
+            for(String imgpath : imgs){
+                images.add("file:///android_asset/" + asDir + "/" + imgpath);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        images.add(R.mipmap.bb01);
+//        images.add(R.mipmap.bb02);
+//        images.add(R.mipmap.bb03);
         banner.setImages(images).setImageLoader(new ImageLoader() {
             @Override
             public void displayImage(Context context, Object path, ImageView imageView) {

@@ -2,10 +2,12 @@ package com.miracle.sport.onetwo.frag;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +25,6 @@ import com.miracle.databinding.FragmentCategoryDetailBinding;
 import com.miracle.sport.SportService;
 import com.miracle.sport.home.activity.SimpleWebCommentActivity;
 import com.miracle.sport.home.adapter.HomeListAdapter;
-import com.miracle.sport.home.bean.FishListItem;
 import com.miracle.sport.home.bean.Football;
 import com.miracle.sport.onetwo.inter.CallBackListener;
 import com.youth.banner.loader.ImageLoader;
@@ -54,6 +55,7 @@ public class FragCpItemList extends HandleFragment<FragmentCategoryDetailBinding
     public CallBackListener getCallBackListener() {
         return callBackListener;
     }
+    Rect rc = new Rect();
 
     public FragCpItemList() {
         super();
@@ -81,6 +83,20 @@ public class FragCpItemList extends HandleFragment<FragmentCategoryDetailBinding
         div.setDrawable(getResources().getDrawable(R.drawable.recycle_divier_shape));
         binding.recyclerView.addItemDecoration(div);
         binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                binding.recyclerView.getGlobalVisibleRect(rc);
+                mAdapter.resetParallaxImgView(rc);
+            }
+        });
+        binding.recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                mAdapter.resetParallaxImgView(rc);
+            }
+        });
         //FootNewsPostActivity
 //        binding.tvCategoryTitle.setText(R.string.main_title_1);
 
@@ -104,7 +120,7 @@ public class FragCpItemList extends HandleFragment<FragmentCategoryDetailBinding
     }
 
     private void initCallback() {
-        callBack = new ZPageLoadCallback<ZResponse<List<Football>>>(mAdapter,binding.recyclerView) {
+        callBack = new ZPageLoadCallback<ZResponse<List<Football>>>(mAdapter, binding.recyclerView) {
             @Override
             public void requestAction(int page, int pageSize) {
                 RequestUtil.cacheUpdate(ZClient.getService(SportService.class).getNewsSpotrList(Integer.parseInt(reqKey), page, pageSize),callBack);
@@ -120,9 +136,10 @@ public class FragCpItemList extends HandleFragment<FragmentCategoryDetailBinding
             @Override
             public void requestAction(int page, int pageSize) {
 //                ZClient.getService(CPServer.class).cpList(page, pageSize, "cp", reqKey).enqueue(this);
-//                if(reqKey.equals("1")) {//只有首页展示的频道做缓存
-//                    callBack.setCachKey("homepage_fcil_key");
-//                }
+                if(reqKey.equals("1") && page == 1) {//只有首页从推荐的第二页开始请求
+                    page++;
+                    callBack.setPage(page);
+                }
 //                else {
 //                    callBack.setCachKey(null);
 //                }
@@ -152,8 +169,12 @@ public class FragCpItemList extends HandleFragment<FragmentCategoryDetailBinding
         View header = LayoutInflater.from(getContext()).inflate(R.layout.banner_layout, null);
         banner = header.findViewById(R.id.banner);
         ArrayList images = new ArrayList<>();
-        images.add(R.mipmap.b3);
-        images.add(R.mipmap.b5);
+//        images.add(R.mipmap.b01);
+//        images.add(R.mipmap.b02);
+//        images.add(R.mipmap.b03);
+//        images.add(R.mipmap.b04);
+        images.add(R.mipmap.banner_f2);
+        images.add(R.mipmap.banner04);
         banner.setImages(images).setImageLoader(new ImageLoader() {
             @Override
             public void displayImage(Context context, Object path, ImageView imageView) {

@@ -67,6 +67,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements O
     private ChannelPagerAdapter mChannelPagerAdapter;
     private Gson mGson = new Gson();
     private String[] mChannelCodes;
+    private boolean isCache;
 
     @Override
     public int getLayout() {
@@ -161,9 +162,23 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements O
             @Override
             protected void onSuccess(ZResponse<List<ChannerlKey>> zResponse) {
                 mNetChannels = zResponse.getData();
-                initChannelData();
-                initChannelFragments();
-                setListener();
+                if(!isCache){
+                    initChannelData();
+                    initChannelFragments();
+                    setListener();
+                }
+            }
+
+            @Override
+            protected void onCacheSuccess(ZResponse<List<ChannerlKey>> zResponse) {
+                super.onCacheSuccess(zResponse);
+                mNetChannels = zResponse.getData();
+                if(null != mNetChannels){
+                    initChannelData();
+                    initChannelFragments();
+                    setListener();
+                    isCache = true;
+                }
             }
         });
 
